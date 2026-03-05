@@ -1,7 +1,6 @@
 # Platform Assurance Repository
 
 Infrastructure-as-code governance for an EU-regulated platform stack.
-Requirements → contracts → measured behavior → signed evidence.
 
 ## Status
 
