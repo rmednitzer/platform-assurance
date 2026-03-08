@@ -8,11 +8,13 @@ This repository provides a structured, version-controlled governance artifact se
 
 The approach treats governance as code: auditable, directly mappable to regulatory requirements, and maintained alongside infrastructure-as-code rather than in disconnected spreadsheets or GRC tools.
 
+The canonical machine-readable source now lives in `controls/catalog.yaml`, with rendered views under `docs/generated/` and an AI-facing artifact classification index in `artifact-index.yaml`.
+
 ## What's in the repository
 
 The artifact set is organized into seven governance documents covering architecture, compliance, security, evidence, AI/API management, observability, and policy — plus supporting registers, templates, and an evidence pipeline implementation.
 
-**Architecture.** A tiered platform Bill of Materials (§1–§17) inventorying every infrastructure component with its tier classification (T0 safety/integrity through T3 exploratory), the boundary it enforces, substitution constraints, and what evidence it produces for audit. A cross-document validation report ensures consistency across all appendices.
+**Architecture.** A tiered platform Bill of Materials (§1–§17) inventorying every infrastructure component with its tier classification (T0 safety/integrity through T3 exploratory), the boundary it enforces, substitution constraints, and what evidence it produces for audit. The BOM is now paired with a canonical control catalog (`controls/catalog.yaml`) and generated control/applicability views under `docs/generated/`.
 
 **Compliance.** A license audit classifying every component's license posture (OSS, BSL, open-core, proprietary). A regulatory mapping cross-referencing NIS2, CRA, and GDPR requirements against stack controls — including a gap analysis, an incident reporting decision tree covering the overlapping NIS2/CRA/GDPR notification timelines, and an evidence reuse map showing which single artifacts satisfy multiple frameworks simultaneously.
 
@@ -59,13 +61,32 @@ The artifact set is organized into seven governance documents covering architect
 
 Evidence is tagged by provenance: `[F]` verified fact, `[I]` inference, `[S]` heuristic — with confidence levels {50,70,80,90}.
 
+## Canonical source and generated views
+
+- `controls/catalog.yaml` — canonical machine-readable control source
+- `controls/catalog.schema.json` — schema for control validation
+- `artifact-index.yaml` — artifact classification for AI continuation context
+- `docs/generated/control-catalog.md` — rendered control view
+- `docs/generated/applicability-matrix.md` — date- and role-gated applicability view
+- `docs/generated/consistency-report.md` — automated validation output
+- `scripts/render_controls.py` — renders generated views
+- `scripts/validate_repo.py` — validates schema, references, links, and shell syntax
+
+## Validation
+
+```bash
+make render
+make validate
+```
+
 ## Getting started
 
-1. Read `docs/architecture/stack-bom.md` — the master component inventory
-2. Review `docs/compliance/regulatory-mapping.md` — understand which obligations apply
-3. Adapt `policies/` to your organisation; get legal review and board sign-off
-4. Populate `registers/` — risk register, asset inventory, ROPA, supplier list
-5. Implement the evidence pipeline starting with `evidence-pipeline/ci/evidence-stage.yml`
+1. Read `controls/catalog.yaml` — the canonical control source
+2. Read `docs/architecture/stack-bom.md` and `docs/generated/control-catalog.md` — component + control views
+3. Review `docs/generated/applicability-matrix.md` and `docs/compliance/regulatory-mapping.md` — understand what applies by date and role
+4. Adapt `policies/` to your organisation; get legal review and board sign-off
+5. Populate `registers/` — risk register, asset inventory, ROPA, supplier list
+6. Implement the evidence pipeline starting with `evidence-pipeline/ci/evidence-stage.yml` and validate with `make validate`
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the review process, commit conventions, and branch model.
 

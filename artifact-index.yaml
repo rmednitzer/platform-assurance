@@ -1,0 +1,192 @@
+version: 1
+artifacts:
+  - path: README.md
+    artifact_type: normative
+    scope: repository-overview
+    status: active
+    canonical_source: README.md
+  - path: artifact-index.yaml
+    artifact_type: normative
+    scope: ai-context-index
+    status: active
+    canonical_source: artifact-index.yaml
+  - path: controls/catalog.yaml
+    artifact_type: normative
+    scope: canonical-control-catalog
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: controls/catalog.schema.json
+    artifact_type: normative
+    scope: control-schema
+    status: active
+    canonical_source: controls/catalog.schema.json
+  - path: docs/architecture/stack-bom.md
+    artifact_type: normative
+    scope: architecture-bom
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/architecture/validation-report.md
+    artifact_type: illustrative
+    scope: historical-manual-reconciliation
+    status: active
+    canonical_source: docs/generated/consistency-report.md
+  - path: docs/compliance/license-audit.md
+    artifact_type: approved-pattern
+    scope: licensing-posture
+    status: active
+    canonical_source: docs/compliance/license-audit.md
+  - path: docs/compliance/regulatory-mapping.md
+    artifact_type: normative
+    scope: regulatory-crosswalk
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/compliance/isms-policies.md
+    artifact_type: approved-pattern
+    scope: policy-templates
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/evidence/evidence-pipeline.md
+    artifact_type: approved-pattern
+    scope: evidence-design
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/ai-api/ai-api-management.md
+    artifact_type: approved-pattern
+    scope: ai-api-governance
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/observability/observability-iam.md
+    artifact_type: approved-pattern
+    scope: observability-iam
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/security/security-assessment.md
+    artifact_type: approved-pattern
+    scope: threat-and-control-assessment
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/generated/control-catalog.md
+    artifact_type: generated
+    scope: rendered-control-view
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/generated/applicability-matrix.md
+    artifact_type: generated
+    scope: date-role-applicability-view
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: docs/generated/consistency-report.md
+    artifact_type: generated
+    scope: automated-consistency-report
+    status: active
+    canonical_source: scripts/validate_repo.py
+  - path: evidence-pipeline/ci/evidence-stage.yml
+    artifact_type: approved-pattern
+    scope: ci-evidence-stage
+    status: active
+    canonical_source: evidence-pipeline/ci/evidence-stage.yml
+  - path: evidence-pipeline/collectors/daily-hash-chain.sh
+    artifact_type: approved-pattern
+    scope: runtime-evidence-chain
+    status: active
+    canonical_source: evidence-pipeline/collectors/daily-hash-chain.sh
+  - path: evidence-pipeline/verification/verify-evidence.sh
+    artifact_type: approved-pattern
+    scope: evidence-integrity-verifier
+    status: active
+    canonical_source: evidence-pipeline/verification/verify-evidence.sh
+  - path: policies/POL-01-information-security.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-02-risk-management.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-03-access-control.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-04-incident-response.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-05-business-continuity.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-06-cryptography.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-07-supply-chain.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-08-secure-development.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-09-data-classification.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: policies/POL-10-change-management.md
+    artifact_type: approved-pattern
+    scope: policy
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: registers/asset-inventory.md
+    artifact_type: approved-pattern
+    scope: register
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: registers/risk-register.md
+    artifact_type: approved-pattern
+    scope: register
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: registers/ropa.md
+    artifact_type: approved-pattern
+    scope: register
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: registers/supplier-register.md
+    artifact_type: approved-pattern
+    scope: register
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: templates/access-review/TEMPLATE-access-review.md
+    artifact_type: approved-pattern
+    scope: template
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: templates/dpia/TEMPLATE-dpia.md
+    artifact_type: approved-pattern
+    scope: template
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: templates/dr-test/TEMPLATE-dr-test-report.md
+    artifact_type: approved-pattern
+    scope: template
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: templates/incident/TEMPLATE-incident-report.md
+    artifact_type: approved-pattern
+    scope: template
+    status: active
+    canonical_source: controls/catalog.yaml
+  - path: templates/supplier/TEMPLATE-supplier-assessment.md
+    artifact_type: approved-pattern
+    scope: template
+    status: active
+    canonical_source: controls/catalog.yaml
