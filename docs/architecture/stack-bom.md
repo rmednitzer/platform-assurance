@@ -42,7 +42,7 @@ The BOM is a rendered architecture view. The canonical control source is `contro
 ## Reading the table
 
 - **Component**: tool, service, or capability
-- **Boundary enforced**: which PIAL (Physics-Informed Abstraction Layer) enforcement point this component serves, if any — see Appendix D (AI & API Management) for the full PIAL definition
+- **Boundary enforced**: which trust boundary this component enforces (e.g., AuthN/AuthZ, secret boundary, PKI/mTLS, model serving). Components at the model serving boundary (TB3) enforce the PIAL (Physics-Informed Abstraction Layer) — see Appendix D (AI & API Management) for the PIAL definition.
 - **Tier**: T0–T3
 - **Env**: W = workstation, L = lab, C = cluster, P = prod (regulated)
 - **Substitution constraints**: what you can swap in and what you cannot
