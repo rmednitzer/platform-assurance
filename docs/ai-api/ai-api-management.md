@@ -59,7 +59,7 @@ User/client
          ▼
 ┌─────────────────────┐
 │ Inference server     │  ← TB3: Model boundary (PIAL enforcement)
-│ (vLLM / TGI)         │      Input contract, output contract, latency budget
+│ (vLLM / TGI)         │      Physical invariants: control law, actuator limits, GPU power/thermal
 └────────┬────────────┘
          │
     ┌────┴────┐
@@ -70,6 +70,8 @@ User/client
 │ (RAG)  │ │ sandbox │      Access control on corpus; sandboxed execution
 └────────┘ └─────────┘
 ```
+
+**PIAL — Physics-Informed Abstraction Layer:** The enforcement boundary at TB3 (the model serving boundary) that constrains model inputs and outputs to be consistent with physical reality. A PIAL specifies three classes of invariant: (1) the *input contract* — incoming state vectors must lie within physically realisable bounds (e.g., sensor readings within measurement range, state estimates satisfying kinematic consistency); (2) the *output contract* — model-generated control actions must satisfy physical invariants before being forwarded to actuators, including control law compliance, actuator saturation limits, rate-of-change constraints, stability margins, GPU power envelope limits, and thermal thresholds (TjMax, power cap); and (3) the *latency budget* — deterministic worst-case response-time bounds required to meet the control loop's real-time deadline, enforced via circuit-breaking if exceeded. Any inference backend that satisfies the PIAL's invariant checks can be substituted without renegotiating downstream actuator interfaces. [I] {80}
 
 ### 1.4 — Tier C: Training / fine-tuning
 
