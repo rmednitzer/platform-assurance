@@ -146,25 +146,25 @@ Key areas validated:
 
 | # | Location | Discrepancy |
 |---|----------|-------------|
-| D-01 | `docs/evidence/evidence-pipeline.md` line 146 | Uses `cosign blob-sign`; actual scripts correctly use `cosign sign-blob` |
-| D-02 | `docs/evidence/evidence-pipeline.md` hash chain example | Doc signs the manifest file; actual script signs the chain entry (script approach is architecturally better) |
-| D-03 | `docs/evidence/evidence-pipeline.md` line 614 | Alertmanager API v1 in doc; actual `verify-evidence.sh` uses v2 API |
-| D-04 | `docs/security/security-assessment.md` | Not listed in `stack-bom.md` document index table, though referenced elsewhere as "Appendix C" |
+| D-01 | `docs/evidence/evidence-pipeline.md` line 146 | ~~Uses `cosign blob-sign`~~ — **RESOLVED**: corrected to `cosign sign-blob` |
+| D-02 | `docs/evidence/evidence-pipeline.md` hash chain example | ~~Doc signs the manifest file~~ — **RESOLVED**: updated to sign chain entry, matching scripts |
+| D-03 | `docs/evidence/evidence-pipeline.md` line 614 | ~~Alertmanager API v1~~ — **RESOLVED**: updated to v2 API |
+| D-04 | `docs/security/security-assessment.md` | ~~Not listed in `stack-bom.md` document index~~ — **RESOLVED**: added as entry K |
 
-These discrepancies are typical of a design document written before implementation and then refined during build. The actual scripts are more correct and robust than the doc examples.
+All discrepancies have been resolved. Documentation now matches the implemented scripts.
 
 ---
 
 ## Summary of Findings
 
-| # | Severity | Finding | Recommendation |
-|---|----------|---------|---------------|
-| F-01 | Medium | POL-02 – POL-10 missing standard structural elements (metadata, sections, review log) | Align structure to POL-01 template |
-| F-02 | Low | Risk register matrix is 3×4, not 4×4 as specified | Clarify specification or add 4th likelihood level |
-| F-03 | Low | Evidence pipeline `CHAIN_PREFIX` configurable in collector but hard-coded in verifier | Parameterise verifier or document constraint |
-| F-04 | Low | Evidence pipeline doc uses outdated cosign subcommand and signing target | Update doc examples to match implemented scripts |
-| F-05 | Info | `CLAUDE.md` repo structure section missing newer files (`controls/`, `scripts/`, `docs/generated/`, `Makefile`, `artifact-index.yaml`) | Update CLAUDE.md |
-| F-06 | Info | POL-08 and POL-10 missing GDPR cross-references in compliance mapping | Add GDPR mapping where applicable |
-| F-07 | Info | Security assessment not listed in stack-bom.md document index | Add entry to document index table |
+| # | Severity | Finding | Status |
+|---|----------|---------|--------|
+| F-01 | Medium | POL-02 – POL-10 missing standard structural elements (metadata, sections, review log) | **RESOLVED** — all policies now match POL-01 structure |
+| F-02 | Low | Risk register matrix is 3×4, not 4×4 as specified | **RESOLVED** — added Critical likelihood row; CLAUDE.md spec updated |
+| F-03 | Low | Evidence pipeline `CHAIN_PREFIX` configurable in collector but hard-coded in verifier | **RESOLVED** — verifier now uses `CHAIN_PREFIX` variable (default: `chain`) |
+| F-04 | Low | Evidence pipeline doc uses outdated cosign subcommand and signing target | **RESOLVED** — corrected `blob-sign` → `sign-blob`, signing target, and API version |
+| F-05 | Info | `CLAUDE.md` repo structure section missing newer files | **RESOLVED** — added `controls/`, `scripts/`, `docs/generated/`, `Makefile`, `artifact-index.yaml` |
+| F-06 | Info | POL-08 and POL-10 missing GDPR cross-references in compliance mapping | **RESOLVED** — added GDPR Art 25 to POL-08; GDPR Art 25, Art 32 to POL-10 |
+| F-07 | Info | Security assessment not listed in stack-bom.md document index | **RESOLVED** — added as entry K in document index |
 
-**Overall assessment:** The repository is well-structured, internally consistent, and fit for purpose as a governance-as-code framework. The automated validation pipeline passes. The actual scripts and controls are robust; findings are primarily about documentation alignment (policies needing structural consistency with POL-01, and evidence pipeline docs needing updates to match the implemented scripts).
+**Overall assessment:** All findings have been resolved. The repository is well-structured, internally consistent, and fit for purpose as a governance-as-code framework. The automated validation pipeline passes. All policies follow a consistent structure, all documentation matches implementation, and all cross-references are complete.
