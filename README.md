@@ -1,6 +1,6 @@
 # platform-assurance
 
-Infrastructure governance artifacts for EU-regulated platform operations.
+Governance-as-code framework for EU-regulated on-premises and hybrid platform operations.
 
 ## Purpose
 
