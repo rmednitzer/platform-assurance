@@ -133,11 +133,25 @@ All 5 templates passed all checks:
 The historical manual validation report (`docs/architecture/validation-report.md`) documents 19 specific cross-document issues identified on 2026-03-05. These are tracked as remediation items and do not represent regressions. The automated validator (`scripts/validate_repo.py`) covers structural consistency; the manual report covers semantic consistency.
 
 Key areas validated:
-- Stack BOM tiering model (T0–T3) correctly applied
-- Regulatory mapping includes bidirectional traceability
-- ISMS policies document references all 10 policies
-- Evidence pipeline documentation consistent with actual scripts
-- Security assessment uses STRIDE per trust boundary
+- Stack BOM tiering model (T0–T3) correctly applied across all 17 sections
+- Regulatory mapping includes bidirectional traceability (NIS2, CRA, GDPR forward and reverse)
+- ISMS policies document references all 10 policies correctly
+- Security assessment uses STRIDE across 5 trust boundaries (TB1–TB5)
+- AI API management covers all 3 workload tiers and all 10 OWASP LLM threats
+- Observability document covers OTel pipeline, IAM (Keycloak), and SLI/SLO framework
+- License audit covers all BOM sections with risk flags for BSL/AGPL components
+- Controls catalog (10 controls) validates against JSON Schema with unique IDs
+
+### Documentation vs implementation discrepancies
+
+| # | Location | Discrepancy |
+|---|----------|-------------|
+| D-01 | `docs/evidence/evidence-pipeline.md` line 146 | Uses `cosign blob-sign`; actual scripts correctly use `cosign sign-blob` |
+| D-02 | `docs/evidence/evidence-pipeline.md` hash chain example | Doc signs the manifest file; actual script signs the chain entry (script approach is architecturally better) |
+| D-03 | `docs/evidence/evidence-pipeline.md` line 614 | Alertmanager API v1 in doc; actual `verify-evidence.sh` uses v2 API |
+| D-04 | `docs/security/security-assessment.md` | Not listed in `stack-bom.md` document index table, though referenced elsewhere as "Appendix C" |
+
+These discrepancies are typical of a design document written before implementation and then refined during build. The actual scripts are more correct and robust than the doc examples.
 
 ---
 
@@ -148,7 +162,9 @@ Key areas validated:
 | F-01 | Medium | POL-02 – POL-10 missing standard structural elements (metadata, sections, review log) | Align structure to POL-01 template |
 | F-02 | Low | Risk register matrix is 3×4, not 4×4 as specified | Clarify specification or add 4th likelihood level |
 | F-03 | Low | Evidence pipeline `CHAIN_PREFIX` configurable in collector but hard-coded in verifier | Parameterise verifier or document constraint |
-| F-04 | Info | `CLAUDE.md` repo structure section missing newer files (`controls/`, `scripts/`, `docs/generated/`, `Makefile`, `artifact-index.yaml`) | Update CLAUDE.md |
-| F-05 | Info | POL-08 and POL-10 missing GDPR cross-references in compliance mapping | Add GDPR mapping where applicable |
+| F-04 | Low | Evidence pipeline doc uses outdated cosign subcommand and signing target | Update doc examples to match implemented scripts |
+| F-05 | Info | `CLAUDE.md` repo structure section missing newer files (`controls/`, `scripts/`, `docs/generated/`, `Makefile`, `artifact-index.yaml`) | Update CLAUDE.md |
+| F-06 | Info | POL-08 and POL-10 missing GDPR cross-references in compliance mapping | Add GDPR mapping where applicable |
+| F-07 | Info | Security assessment not listed in stack-bom.md document index | Add entry to document index table |
 
-**Overall assessment:** The repository is well-structured, internally consistent, and fit for purpose as a governance-as-code framework. The automated validation pipeline passes. The primary gap is structural inconsistency across policies (POL-02–POL-10 do not follow the same template as POL-01).
+**Overall assessment:** The repository is well-structured, internally consistent, and fit for purpose as a governance-as-code framework. The automated validation pipeline passes. The actual scripts and controls are robust; findings are primarily about documentation alignment (policies needing structural consistency with POL-01, and evidence pipeline docs needing updates to match the implemented scripts).
