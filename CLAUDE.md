@@ -1,0 +1,165 @@
+# CLAUDE.md — AI Assistant Guide for platform-assurance
+
+## Project Overview
+
+This repository contains **infrastructure governance artifacts** for EU-regulated platform operations. It is a documentation-and-policy repo — not a traditional software project. There is no application code, no build system, and no test suite. The deliverables are Markdown documents, shell scripts, and CI pipeline definitions that together form a governance-as-code framework.
+
+**Owner:** Roman Mednitzer
+**License:** MIT
+**Regulatory scope:** NIS2, CRA, GDPR, EU AI Act, ISO 27001:2022, Austrian DSG/NISG 2026
+
+## Repository Structure
+
+```
+platform-assurance/
+├── docs/                          # Governance documentation
+│   ├── architecture/
+│   │   ├── stack-bom.md           # Master component inventory (tiered T0–T3)
+│   │   └── validation-report.md   # Cross-document consistency checks
+│   ├── compliance/
+│   │   ├── isms-policies.md       # ISMS policy set overview
+│   │   ├── license-audit.md       # OSS/BSL/proprietary license classification
+│   │   └── regulatory-mapping.md  # NIS2/CRA/GDPR → controls mapping + gap analysis
+│   ├── evidence/
+│   │   └── evidence-pipeline.md   # Evidence lifecycle: generate → sign → store
+│   ├── ai-api/
+│   │   └── ai-api-management.md   # AI workload tiers, API gateways, OWASP LLM Top 10
+│   ├── observability/
+│   │   └── observability-iam.md   # OTel pipeline, IAM (Keycloak), SLI/SLO framework
+│   └── security/
+│       └── security-assessment.md # STRIDE threat model per trust boundary
+├── policies/                      # ISMS policy set (POL-01 through POL-10)
+│   ├── POL-01-information-security.md
+│   ├── POL-02-risk-management.md
+│   ├── POL-03-access-control.md
+│   ├── POL-04-incident-response.md
+│   ├── POL-05-business-continuity.md
+│   ├── POL-06-cryptography.md
+│   ├── POL-07-supply-chain.md
+│   ├── POL-08-secure-development.md
+│   ├── POL-09-data-classification.md
+│   └── POL-10-change-management.md
+├── registers/                     # Operational registers
+│   ├── asset-inventory.md
+│   ├── risk-register.md
+│   ├── ropa.md                    # Record of Processing Activities (GDPR Art. 30)
+│   └── supplier-register.md
+├── templates/                     # Reusable assessment/report templates
+│   ├── access-review/TEMPLATE-access-review.md
+│   ├── dpia/TEMPLATE-dpia.md
+│   ├── dr-test/TEMPLATE-dr-test-report.md
+│   ├── incident/TEMPLATE-incident-report.md
+│   └── supplier/TEMPLATE-supplier-assessment.md
+├── evidence-pipeline/             # Evidence automation (shell scripts + CI)
+│   ├── ci/evidence-stage.yml      # GitLab CI evidence generation stage
+│   ├── collectors/daily-hash-chain.sh  # Daily hash chain for tamper detection
+│   └── verification/verify-evidence.sh # Automated integrity health check
+├── CONTRIBUTING.md
+├── LICENSE
+└── README.md
+```
+
+## Key Concepts
+
+### Tiering Model
+Components are classified into tiers that determine change management rigor:
+- **T0 — Safety/integrity:** Failure = unsafe state, data loss, or compliance failure. Full change plan required.
+- **T1 — Operational:** Daily ops/SRE. Standard change + verify + rollback.
+- **T2 — Productivity:** Developer quality-of-life. Lightweight change.
+- **T3 — Exploratory:** Lab/sandbox. Minimal gates.
+
+### Evidence Tagging
+Evidence is tagged by provenance with confidence levels:
+- `[F]` — Verified fact
+- `[I]` — Inference
+- `[S]` — Heuristic
+- Confidence levels: {50, 70, 80, 90}
+
+### Regulatory Frameworks
+All controls map bidirectionally to: NIS2, CRA, GDPR, EU AI Act, ISO 27001:2022 Annex A, Austrian DSG/NISG 2026, and the Secure Controls Framework (SCF).
+
+### Methodologies
+- **STPA** — System-Theoretic Process Analysis for hazard identification
+- **STRIDE** — Threat modelling per trust boundary
+- **CAE** — Claims-Arguments-Evidence for assurance cases
+- **CACE** — Changing Anything Changes Everything (change management principle)
+
+## Commit Conventions
+
+Use **conventional commits** with these prefixes:
+- `feat:` — New governance artifact or capability
+- `fix:` — Corrections to existing artifacts
+- `docs:` — Documentation changes (docs/ directory)
+- `policy:` — Policy changes (policies/ directory)
+- `register:` — Register updates (registers/ directory)
+
+All commits should be signed (GPG or SSH): `git commit -S`
+
+Policy approvals get a signed tag: `policy/POL-XX-vN.N`
+
+## Branch Model
+
+- `main` — Approved, current state of governance
+- `draft/*` — Work in progress (policies under legal review, register updates)
+- No direct pushes to `main` — merge requests only
+
+## Review Requirements by Path
+
+| Path | Review required | Approver |
+|------|----------------|----------|
+| `policies/` | Legal review + CISO + Board approval | CISO signs tag |
+| `registers/` | CISO or register owner | Merge request review |
+| `docs/` | Peer review (1 reviewer minimum) | Any team member |
+| `templates/` | CISO review | Merge request review |
+| `evidence-pipeline/` | Peer review + CISO | Treat as production change |
+
+## Evidence Pipeline
+
+The evidence pipeline uses **GitLab CI** with these tools:
+- **cosign** — Keyless signing via GitLab OIDC (Sigstore)
+- **syft** — SBOM generation (CycloneDX + SPDX)
+- **trivy** — Vulnerability scanning
+- **crane** — OCI image digest
+- **mc** — MinIO client for WORM storage upload
+- **OpenSearch** — Evidence catalogue indexing
+
+Key scripts:
+- `evidence-pipeline/ci/evidence-stage.yml` — CI stage that generates SBOMs, scans, signs, and uploads evidence
+- `evidence-pipeline/collectors/daily-hash-chain.sh` — Cron job (00:05 UTC) producing signed daily digest with append-only hash chain
+- `evidence-pipeline/verification/verify-evidence.sh` — Cron job (01:00 UTC) verifying hash chain continuity, cosign signatures, and Object Lock status
+
+## Guidelines for AI Assistants
+
+### Content Standards
+- All documents follow **British English spelling** conventions (organisation, authorised, etc.)
+- Policies use a consistent structure: Version, Owner, Approved by, Review cycle, Classification, then Purpose → Scope → Policy statements → Roles → Compliance mapping → Review log
+- Register entries use tabular format with specific column schemas — match existing column structures exactly
+- Templates use placeholder patterns: `[bracketed text]`, `YYYY-MM-DD`, `HH:MM`
+
+### When Editing Policies
+- Policies are legally significant — do not change wording casually
+- Maintain cross-references to regulatory frameworks (NIS2 Art. X, ISO 27001 A.X.X, GDPR Art. X)
+- Keep the compliance mapping table at the end of each policy
+- Preserve `DRAFT` status markers; do not mark as approved
+
+### When Editing Evidence Pipeline Scripts
+- Scripts use `set -euo pipefail` — maintain strict error handling
+- All evidence artifacts must be signed with cosign
+- Upload destinations use MinIO WORM buckets with Object Lock in COMPLIANCE mode
+- Hash chain integrity is critical — do not alter the chaining algorithm without understanding the verification side
+
+### When Editing Registers
+- Preserve the column schema exactly — auditors rely on consistent structure
+- Use placeholder patterns for unfilled fields rather than deleting columns
+- Risk register uses a 4×4 matrix (Low/Medium/High/Critical × Low/Medium/High likelihood)
+
+### When Editing Templates
+- Templates are prefixed with `TEMPLATE-` — keep this convention
+- Placeholders should be self-descriptive: `[Name]`, `[INCIDENT-ID]`, `YYYY-MM-DD HH:MM UTC`
+- Do not fill in template fields with example data unless explicitly creating a worked example
+
+### General
+- This is a governance repo — accuracy and regulatory traceability matter more than brevity
+- When adding new controls or mappings, ensure bidirectional traceability (control → regulation AND regulation → control)
+- Maintain consistency with the stack BOM tiering model (T0–T3) when referencing components
+- Evidence storage references should point to `evidence/` paths in MinIO, not local filesystem paths
