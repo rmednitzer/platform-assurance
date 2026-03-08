@@ -159,7 +159,7 @@ The BOM is a rendered architecture view. The canonical control source is `contro
 | Component | Boundary enforced | Tier | Env | Substitution constraints | Evidence output |
 |-----------|-------------------|------|-----|--------------------------|-----------------|
 | MLflow | Experiment tracking + model registry | T1 | L,P | W&B acceptable; must support lineage, artifact signing, promotion gates | Experiment logs, model metadata, promotion records |
-| vLLM / TGI / Ollama | Inference serving | T1 | L,P | Choose per model/latency; Ollama for local dev, vLLM/TGI for production throughput | Inference latency/error metrics |
+| vLLM / TGI / Ollama | Model serving (TB3 — PIAL) | T1 | L,P | Choose per model/latency; Ollama for local dev, vLLM/TGI for production throughput | Inference latency/error metrics |
 | Qdrant | Vector DB (RAG) | T1 | L,P | Apache 2.0, purpose-built, already integrated via Open WebUI. OpenSearch k-NN as fallback where a separate vector DB dependency is undesirable. Milvus if billion-vector scale required. | Collection metadata, query latency |
 | OTel for inference | Inference boundary monitoring | T0 | P | Non-negotiable; GenAI semantic conventions | Inference traces, token metrics, error rates |
 | Eval harness (golden sets + red-team) | Output quality gate | T0 | L,P | Custom + lm-eval-harness; must include regression, jailbreak, bias checks | Eval reports per model release |

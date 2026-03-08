@@ -59,7 +59,7 @@ User/client
          ▼
 ┌─────────────────────┐
 │ Inference server     │  ← TB3: Model boundary (PIAL enforcement)
-│ (vLLM / TGI)         │      Input contract, output contract, latency budget
+│ (vLLM / TGI)         │      Physical invariants: control law, actuator limits, GPU power/thermal
 └────────┬────────────┘
          │
     ┌────┴────┐
