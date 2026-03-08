@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** CISO
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual
+**Classification:** Internal
+
+## Purpose
+
+Define the cryptographic standards and key management practices required to protect information in transit, at rest, and in use.
+
+## Scope
+
+All cryptographic operations, key material, certificates, and signing activities across the organisation's infrastructure.
+
+## Policy statements
+
+The organisation shall use approved cryptographic algorithms and manage keys in accordance with the following standards.
 
 ## Approved algorithms
 
@@ -37,6 +51,13 @@
 - Artifacts: cosign (Sigstore keyless in CI; key-based as fallback)
 - Evidence: cosign blob-sign; GPG for governance docs
 
+## Roles and responsibilities
+
+- **CISO:** Approve cryptographic standards; oversee key management procedures.
+- **IT operations:** Manage certificates (cert-manager), Vault/OpenBao key backends, and encryption configurations.
+- **Developers:** Use approved algorithms only; never store secrets in code.
+- **All personnel:** Protect personal keys and hardware tokens.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -46,3 +67,9 @@
 | SCF CRY-01 | Secure Controls Framework |
 | GDPR Art 32(1)(a) | GDPR |
 | CRA Annex I Part I | CRA |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |

@@ -2,7 +2,7 @@
 
 This file is generated from `controls/catalog.yaml`. Edit the catalog, not this view.
 
-Generated: 2026-03-08T10:17:32Z
+Generated: 2026-03-08T10:49:06Z
 
 ## Control summary
 

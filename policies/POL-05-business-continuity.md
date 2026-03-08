@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** CISO + Operations Lead
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual
+**Classification:** Internal
+
+## Purpose
+
+Ensure the continuity of critical services and the timely recovery of information systems following disruption.
+
+## Scope
+
+All critical and important services, supporting infrastructure, data stores, and recovery procedures.
+
+## Policy statements
+
+The organisation shall maintain business continuity and disaster recovery plans covering the following areas.
 
 ## RTO/RPO targets
 
@@ -31,6 +45,13 @@
 - Escalation chain: [who declares, who authorises failover]
 - Communication plan: internal, external, regulatory (parallel to POL-04 if incident-triggered)
 
+## Roles and responsibilities
+
+- **CISO + Operations Lead:** Maintain BC/DR plans; coordinate testing.
+- **Service owners:** Define RTO/RPO for their services; participate in DR exercises.
+- **IT operations:** Execute recovery procedures; maintain backup infrastructure.
+- **All personnel:** Know their role in a business continuity event.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -40,3 +61,9 @@
 | SCF BCD-01 | Secure Controls Framework |
 | CRA Annex I Part I (DoS resilience) | CRA |
 | GDPR Art 32(1)(b) | GDPR |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |

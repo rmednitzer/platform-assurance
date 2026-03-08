@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** CISO
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual + after every major incident
+**Classification:** Internal
+
+## Purpose
+
+Establish the incident response process to detect, contain, eradicate, and recover from security incidents while meeting regulatory notification obligations.
+
+## Scope
+
+All security incidents, near-misses, and events that may affect the confidentiality, integrity, or availability of organisational systems or data.
+
+## Policy statements
+
+The organisation shall maintain an incident response capability covering the following areas.
 
 ## Classification
 
@@ -13,7 +27,7 @@
 | P3 (Medium) | Anomaly detected, non-critical vulnerability exploited | < 4 hours |
 | P4 (Low) | Minor event, no business impact | Next business day |
 
-## Roles
+## Roles and responsibilities
 
 - **Incident Commander (IC):** CISO or delegate
 - **Technical Lead:** Senior engineer on-call
@@ -62,3 +76,9 @@ All three chains can fire simultaneously. Single intake → triage → parallel 
 | GDPR Art 33, 34 | GDPR |
 | CRA Annex I Part II | CRA |
 | NISG 2026, NISG 2018 § 19 | Austrian law |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |

@@ -16,6 +16,7 @@
 
 |  | **Low impact** | **Medium impact** | **High impact** | **Critical impact** |
 |---|---|---|---|---|
+| **Critical likelihood** | High | Critical | Critical | Critical |
 | **High likelihood** | Medium | High | Critical | Critical |
 | **Medium likelihood** | Low | Medium | High | Critical |
 | **Low likelihood** | Low | Low | Medium | High |

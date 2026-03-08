@@ -10,6 +10,14 @@
 
 Define the process for identifying, assessing, treating, and monitoring information security risks.
 
+## Scope
+
+All information assets, systems, and processes subject to risk that could affect the confidentiality, integrity, or availability of organisational information.
+
+## Policy statements
+
+The organisation shall implement a formal risk management process covering the following areas.
+
 ## Risk assessment methodology
 
 1. Asset identification and valuation (link to asset inventory in `registers/asset-inventory.md`)
@@ -35,6 +43,13 @@ Maintained in `registers/risk-register.md`. Reviewed quarterly. Each entry: risk
 
 Quarterly review of risk register by CISO + management. Annual board-level review with sign-off. Minutes stored in evidence pipeline (`evidence/governance/`).
 
+## Roles and responsibilities
+
+- **Board / Executive management:** Accept residual risk for T0 systems; annual review sign-off.
+- **CISO:** Maintain risk register; conduct quarterly reviews; report to management.
+- **Risk owners:** Assess and treat risks in their domain; monitor residual risk.
+- **All personnel:** Report identified risks and threats.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -44,3 +59,9 @@ Quarterly review of risk register by CISO + management. Annual board-level revie
 | SCF RSK-01, RSK-04 | Secure Controls Framework |
 | GDPR Art 32, 35 | GDPR |
 | CRA Annex I Part I | CRA |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |

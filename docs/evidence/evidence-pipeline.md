@@ -143,8 +143,8 @@ evidence:
     - cosign attest --yes --predicate provenance.json --type slsaprovenance ${IMAGE}
 
     # 6. Sign non-OCI evidence files
-    - cosign blob-sign --yes --bundle vuln-report.bundle vuln-report.json
-    - cosign blob-sign --yes --bundle policy-result.bundle policy-result.json
+    - cosign sign-blob --yes --bundle vuln-report.bundle vuln-report.json
+    - cosign sign-blob --yes --bundle policy-result.bundle policy-result.json
 
     # 7. Build evidence manifest (index of all artifacts + hashes)
     - |
@@ -163,7 +163,7 @@ evidence:
         }
       }
       EOF
-    - cosign blob-sign --yes --bundle manifest.bundle evidence-manifest.json
+    - cosign sign-blob --yes --bundle manifest.bundle evidence-manifest.json
 
     # 8. Upload to evidence store (MinIO WORM bucket)
     - mc cp --recursive evidence/ minio/evidence/ci/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}/
@@ -266,10 +266,11 @@ MANIFEST_HASH=$(sha256sum /tmp/daily-manifest-${DATE}.txt | cut -d' ' -f1)
 # 3. Chain to previous day's hash (append-only chain)
 PREV_HASH=$(mc cat minio/evidence/chain/latest-hash.txt 2>/dev/null || echo "GENESIS")
 CHAIN_ENTRY="${DATE}|${MANIFEST_HASH}|prev:${PREV_HASH}"
-echo "${CHAIN_ENTRY}" | sha256sum | cut -d' ' -f1 > /tmp/chain-hash-${DATE}.txt
+printf '%s\n' "${CHAIN_ENTRY}" > /tmp/chain-entry-${DATE}.txt
+sha256sum /tmp/chain-entry-${DATE}.txt | cut -d' ' -f1 > /tmp/chain-hash-${DATE}.txt
 
 # 4. Sign the chain entry
-cosign blob-sign --yes --bundle /tmp/chain-${DATE}.bundle /tmp/daily-manifest-${DATE}.txt
+cosign sign-blob --yes --bundle /tmp/chain-${DATE}.bundle /tmp/chain-entry-${DATE}.txt
 
 # 5. Upload manifest, chain hash, and signature to evidence store
 mc cp /tmp/daily-manifest-${DATE}.txt minio/evidence/chain/${DATE}-manifest.txt
@@ -611,7 +612,7 @@ mc retention info minio/evidence/runtime/ | grep -q "COMPLIANCE" || FAILURES=$((
 # 5. Alert on failures
 if [ $FAILURES -gt 0 ]; then
   echo "EVIDENCE INTEGRITY CHECK FAILED: ${FAILURES} issues" | \
-    curl -X POST "${ALERTMANAGER_URL}/api/v1/alerts" -d "..."
+    curl -X POST "${ALERTMANAGER_URL}/api/v2/alerts" -d "..."
 fi
 ```
 

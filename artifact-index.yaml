@@ -80,6 +80,11 @@ artifacts:
     scope: automated-consistency-report
     status: active
     canonical_source: scripts/validate_repo.py
+  - path: docs/generated/full-validation-report.md
+    artifact_type: generated
+    scope: full-repository-validation
+    status: active
+    canonical_source: docs/generated/full-validation-report.md
   - path: evidence-pipeline/ci/evidence-stage.yml
     artifact_type: approved-pattern
     scope: ci-evidence-stage

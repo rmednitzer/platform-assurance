@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** CISO + DPO
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual
+**Classification:** Internal
+
+## Purpose
+
+Define the data classification scheme and handling requirements to protect information according to its sensitivity and regulatory obligations.
+
+## Scope
+
+All data processed, stored, or transmitted by the organisation, including personal data subject to GDPR.
+
+## Policy statements
+
+The organisation shall classify and handle data in accordance with the following scheme.
 
 ## Classification levels
 
@@ -37,6 +51,13 @@
 
 Maintained in `registers/asset-inventory.md`. Each system: name, owner, data classification, data types, backup status, retention period.
 
+## Roles and responsibilities
+
+- **CISO + DPO:** Define classification scheme; oversee handling compliance.
+- **Data owners:** Classify data assets; approve access.
+- **IT operations:** Implement technical controls per classification level.
+- **All personnel:** Handle data according to its classification; report misclassification.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -46,3 +67,9 @@ Maintained in `registers/asset-inventory.md`. Each system: name, owner, data cla
 | SCF DCL-01 | Secure Controls Framework |
 | GDPR Art 5(1)(c), 5(1)(f), 25, 30 | GDPR |
 | DSG § 50 | Austrian DSG |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |
