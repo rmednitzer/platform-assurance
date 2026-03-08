@@ -2,7 +2,7 @@
 
 This file is generated from `controls/catalog.yaml`.
 
-Generated: 2026-03-08T11:42:13Z
+Generated: 2026-03-08T14:11:07Z
 
 | From | Control ID | Title | Framework | Regulatory reference | Roles | Until | Condition |
 |------|------------|-------|-----------|----------------------|-------|-------|-----------|
