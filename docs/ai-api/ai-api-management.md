@@ -71,6 +71,8 @@ User/client
 └────────┘ └─────────┘
 ```
 
+**PIAL — Prompt Interface Assurance Layer:** The set of enforceable contracts at TB3 (the model serving boundary) that govern interactions between the LLM gateway and the inference server. A PIAL specifies: (1) the *input contract* — schema, token budget ceiling, and content constraints on prompts sent to the model; (2) the *output contract* — schema, maximum token length, content policy requirements, and structured-output validation rules applied to completions before they are returned upstream; and (3) the *latency budget* — per-request and p99 response-time thresholds used to trigger circuit-breaking or fallback routing. Together these contracts make the model boundary auditable and substitutable: any inference backend (vLLM, TGI, or third-party) that satisfies the PIAL can be swapped in without renegotiating upstream gateway policy. [I] {80}
+
 ### 1.4 — Tier C: Training / fine-tuning
 
 Trust boundaries for training:
