@@ -1,0 +1,423 @@
+version: 1
+catalog_status: draft
+catalog_owner: platform-governance
+catalog_purpose: Canonical machine-readable control source for generated governance views.
+controls:
+  - control_id: CTL-0001
+    title: Federated IAM with MFA and auditable authorization
+    status: draft
+    artifact_type: normative
+    boundary: admission
+    objective: Enforce authenticated, least-privilege access with evidence of every privileged decision.
+    required_capability:
+      - oidc_or_saml_identity_provider
+      - mfa
+      - rbac_or_abac
+      - audit_log_export
+    approved_patterns:
+      - Keycloak + FIDO2/WebAuthn + role model review
+    owners:
+      - security
+      - platform
+    verification_command: >-
+      keycloak export health + access review evidence + privileged role diff approval
+    evidence_schema:
+      artifact_type: access_review
+      required_files:
+        - access-review-report.json
+        - reviewer-signoff.bundle
+      retention_tier: governance_10y
+    exception_process: Security owner approval with compensating controls and dated expiry.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 21(2)(i)
+        roles:
+          - operator
+          - deployer
+        applicable_from: 2024-10-17
+      - framework: NISG-AT
+        regulatory_ref: NISG 2026 national implementation
+        roles:
+          - operator
+        applicable_from: 2026-10-01
+      - framework: GDPR
+        regulatory_ref: Articles 25, 32
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+  - control_id: CTL-0002
+    title: Secrets management with revocation and audit trail
+    status: draft
+    artifact_type: normative
+    boundary: secret-boundary
+    objective: Prevent unmanaged static secrets and prove secret lifecycle control.
+    required_capability:
+      - secret_lease_management
+      - audit_backend
+      - revocation
+    approved_patterns:
+      - Vault or OpenBao with audit backend and dynamic credentials
+    owners:
+      - security
+      - platform
+    verification_command: >-
+      vault lease list + revoke test + audit log signature verification
+    evidence_schema:
+      artifact_type: secret-control-proof
+      required_files:
+        - secret-lease-report.json
+        - revoke-test.log
+      retention_tier: governance_10y
+    exception_process: Break-glass approval, bounded lifetime, retrospective review.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 21(2)(h)
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: GDPR
+        regulatory_ref: Article 32(1)(a)
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+  - control_id: CTL-0003
+    title: Signed software supply chain with SBOM and provenance
+    status: draft
+    artifact_type: normative
+    boundary: admission
+    objective: Ensure deployed artifacts are traceable, signed, and accompanied by machine-readable inventory.
+    required_capability:
+      - sbom_generation
+      - vulnerability_scan
+      - signature_verification
+      - provenance_attestation
+    approved_patterns:
+      - Syft + Trivy + cosign + in-toto/SLSA + Kyverno verifyImages
+    owners:
+      - platform
+      - security
+    verification_command: >-
+      syft/trivy outputs present + cosign verify + kyverno admission test + provenance attestation lookup
+    evidence_schema:
+      artifact_type: ci_evidence_manifest
+      required_files:
+        - sbom-cdx.json
+        - sbom-spdx.json
+        - vuln-report.json
+        - evidence-manifest.json
+        - manifest.bundle
+      retention_tier: ci_3y
+    exception_process: Change advisory approval with explicit risk acceptance and temporary policy override.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 21(2)(d),(e)
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: CRA
+        regulatory_ref: Annex I Part II, Article 13, Article 14
+        roles:
+          - manufacturer
+          - importer
+        applicable_from: 2026-09-11
+      - framework: CRA
+        regulatory_ref: General application
+        roles:
+          - manufacturer
+          - importer
+          - distributor
+        applicable_from: 2027-12-11
+  - control_id: CTL-0004
+    title: Immutable evidence store with retention controls
+    status: draft
+    artifact_type: normative
+    boundary: recovery
+    objective: Preserve audit and incident evidence against tampering and premature deletion.
+    required_capability:
+      - object_lock_compliance_mode
+      - retention_policies
+      - independent_signature_or_timestamp
+    approved_patterns:
+      - MinIO object lock COMPLIANCE + cosign bundles + Rekor lookup
+    owners:
+      - security
+      - platform
+    verification_command: >-
+      mc retention info + chain verification + sample object lock immutability check
+    evidence_schema:
+      artifact_type: evidence-integrity-report
+      required_files:
+        - chain-entry.txt
+        - chain-hash.txt
+        - chain-entry.bundle
+      retention_tier: governance_10y
+    exception_process: Not permitted without board-approved retention change and legal review.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 21, Article 23
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: CRA
+        regulatory_ref: Article 14, Annex I Part II
+        roles:
+          - manufacturer
+        applicable_from: 2026-09-11
+      - framework: GDPR
+        regulatory_ref: Articles 5(2), 30, 32, 33
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+  - control_id: CTL-0005
+    title: Incident triage with parallel regulatory notification paths
+    status: draft
+    artifact_type: normative
+    boundary: recovery
+    objective: Route a single incident record into the correct legal notifications with evidentiary continuity.
+    required_capability:
+      - incident_classification
+      - timed_notification_runbooks
+      - evidence_preservation
+    approved_patterns:
+      - Wazuh/Falco/Alertmanager + incident template + regulator-specific checklists
+    owners:
+      - security
+      - legal
+      - privacy
+    verification_command: >-
+      tabletop exercise record + notification timer drill + signed incident package
+    evidence_schema:
+      artifact_type: incident-report
+      required_files:
+        - incident-report.md
+        - notification-log.json
+        - evidence-preservation-checklist.json
+      retention_tier: incidents_5y
+    exception_process: None for notification clocks; escalation required immediately on ambiguity.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 23
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: NISG-AT
+        regulatory_ref: NISG 2018 transitional applicability
+        roles:
+          - operator
+        applicable_from: 2018-12-29
+        applicable_until: 2026-09-30
+      - framework: NISG-AT
+        regulatory_ref: NISG 2026 effective date
+        roles:
+          - operator
+        applicable_from: 2026-10-01
+      - framework: GDPR
+        regulatory_ref: Articles 33, 34
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+      - framework: CRA
+        regulatory_ref: Article 14
+        roles:
+          - manufacturer
+        applicable_from: 2026-09-11
+  - control_id: CTL-0006
+    title: Logging legality, minimisation, and forensic correlation
+    status: draft
+    artifact_type: normative
+    boundary: decision
+    objective: Preserve enough telemetry for security and audit without losing legal basis or retention discipline.
+    required_capability:
+      - correlation_ids
+      - structured_logging
+      - retention_per_category
+      - redaction_or_pseudonymisation
+    approved_patterns:
+      - OTel + Loki/OpenSearch ILM + documented legal basis per log category
+    owners:
+      - security
+      - privacy
+      - platform
+    verification_command: >-
+      log schema check + retention policy export + redaction sample + access log correlation proof
+    evidence_schema:
+      artifact_type: logging-control-proof
+      required_files:
+        - retention-policy-export.json
+        - log-schema.json
+        - correlation-sample.txt
+      retention_tier: governance_10y
+    exception_process: DPO and security sign-off for any retention override.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 21(2)(j)
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: GDPR
+        regulatory_ref: Articles 5(1)(c), 5(1)(e), 5(2), 25, 32
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+  - control_id: CTL-0007
+    title: Backup, restore, and disaster recovery proof
+    status: draft
+    artifact_type: normative
+    boundary: recovery
+    objective: Demonstrate recoverability against defined RTO/RPO targets with signed restore evidence.
+    required_capability:
+      - scheduled_backups
+      - restore_tests
+      - immutable_backup_metadata
+    approved_patterns:
+      - Velero + restic/borg + pgBackRest + signed DR test reports
+    owners:
+      - platform
+      - security
+    verification_command: >-
+      restore drill execution + RTO/RPO measurement + signed DR report upload
+    evidence_schema:
+      artifact_type: dr-test-report
+      required_files:
+        - dr-test-report.md
+        - restore-log.txt
+        - timing-metrics.json
+      retention_tier: dr_tests_5y
+    exception_process: Risk acceptance only with compensating failover design and explicit expiry.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 21(2)(c)
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: GDPR
+        regulatory_ref: Article 32(1)(b),(c)
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+  - control_id: CTL-0008
+    title: Supplier and processor assurance
+    status: draft
+    artifact_type: normative
+    boundary: admission
+    objective: Prove third-party dependencies and processors are assessed before use and reviewed on cadence.
+    required_capability:
+      - supplier_inventory
+      - due_diligence_template
+      - contractual_security_requirements
+    approved_patterns:
+      - supplier register + supplier assessment template + Article 28 checklist
+    owners:
+      - procurement
+      - legal
+      - security
+    verification_command: >-
+      supplier register review + signed assessment + DPA presence check
+    evidence_schema:
+      artifact_type: supplier-assessment
+      required_files:
+        - supplier-assessment.md
+        - dpa-checklist.json
+      retention_tier: governance_10y
+    exception_process: Vendor risk acceptance signed by procurement, legal, and security.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 21(2)(d)
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: GDPR
+        regulatory_ref: Articles 28, 44-49
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+      - framework: CRA
+        regulatory_ref: Annex I Part II
+        roles:
+          - manufacturer
+        applicable_from: 2027-12-11
+  - control_id: CTL-0009
+    title: AI gateway policy, provenance, and kill switch
+    status: draft
+    artifact_type: approved-pattern
+    boundary: decision
+    objective: Keep AI/API traffic governed through an explicit policy and provenance boundary.
+    required_capability:
+      - model_routing_control
+      - prompt_and_response_logging_policy
+      - emergency_disable
+      - evaluation_gate
+    approved_patterns:
+      - LiteLLM proxy + feature flag kill switch + eval harness + model provenance log
+    owners:
+      - platform
+      - security
+      - product
+    verification_command: >-
+      kill-switch drill + gateway policy export + evaluation bundle lookup
+    evidence_schema:
+      artifact_type: ai-gateway-proof
+      required_files:
+        - gateway-policy.json
+        - kill-switch-test.log
+        - eval-summary.json
+      retention_tier: governance_10y
+    exception_process: AI governance review board approval.
+    applicability:
+      - framework: AI-Act
+        regulatory_ref: Article 8 risk management and applicable downstream obligations by system classification
+        roles:
+          - provider
+          - deployer
+        applicable_from: 2026-08-02
+        condition: Only when the system falls in a regulated AI Act risk class or uses GPAI obligations.
+      - framework: GDPR
+        regulatory_ref: Articles 25, 35
+        roles:
+          - controller
+          - processor
+        applicable_from: 2018-05-25
+        condition: When AI workloads process personal data.
+  - control_id: CTL-0010
+    title: Management accountability and cyber training evidence
+    status: draft
+    artifact_type: normative
+    boundary: governance
+    objective: Prove management review, accountability, and training for regulated cyber obligations.
+    required_capability:
+      - management_signoff
+      - training_records
+      - review_cadence
+    approved_patterns:
+      - board approval minutes + annual training register + policy review workflow
+    owners:
+      - executive
+      - security
+      - legal
+    verification_command: >-
+      signed board minutes + training attendance export + annual review ticket closure
+    evidence_schema:
+      artifact_type: governance-approval-record
+      required_files:
+        - board-minutes.pdf
+        - training-attendance.csv
+      retention_tier: governance_10y
+    exception_process: Not waivable; escalate to board secretary and CISO.
+    applicability:
+      - framework: NIS2
+        regulatory_ref: Article 20
+        roles:
+          - operator
+        applicable_from: 2024-10-17
+      - framework: NISG-AT
+        regulatory_ref: NISG 2026 management obligations
+        roles:
+          - operator
+        applicable_from: 2026-10-01

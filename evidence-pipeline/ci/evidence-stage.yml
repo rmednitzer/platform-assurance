@@ -1,0 +1,84 @@
+# Evidence generation stage for GitLab CI
+# Add this stage to your .gitlab-ci.yml
+# Prerequisites: cosign, syft, trivy, crane, mc (MinIO client), curl available in CI image
+
+evidence:
+  stage: evidence
+  image: ${CI_REGISTRY}/ci-tools:latest
+  variables:
+    EVIDENCE_BUCKET: evidence
+    EVIDENCE_PREFIX: ci/${CI_PROJECT_PATH}/${CI_PIPELINE_ID}
+    EVIDENCE_UPLOAD_DIR: evidence-upload
+  script:
+    - set -euo pipefail
+    - IMAGE_DIGEST=$(crane digest "${IMAGE}")
+    - IMAGE_REPO="${IMAGE}"
+    - if [[ "${IMAGE_REPO}" == *@* ]]; then IMAGE_REPO="${IMAGE_REPO%@*}"; elif [[ "${IMAGE_REPO}" =~ :[^/]+$ ]]; then IMAGE_REPO="${IMAGE_REPO%:*}"; fi
+    - PINNED_IMAGE="${IMAGE_REPO}@${IMAGE_DIGEST}"
+
+    # 1. Generate SBOMs and vulnerability scan against the pinned image
+    - syft "${PINNED_IMAGE}" -o cyclonedx-json > sbom-cdx.json
+    - syft "${PINNED_IMAGE}" -o spdx-json > sbom-spdx.json
+    - trivy image --format json --output vuln-report.json "${PINNED_IMAGE}"
+
+    # 2. Sign the pinned image and attach attestations
+    - cosign sign --yes "${PINNED_IMAGE}"
+    - cosign attach sbom --sbom sbom-cdx.json "${PINNED_IMAGE}"
+    - cosign attest --yes --predicate sbom-cdx.json --type cyclonedx "${PINNED_IMAGE}"
+
+    # 3. Sign non-OCI evidence files
+    - cosign sign-blob --yes --bundle vuln-report.bundle vuln-report.json >/dev/null
+
+    # 4. Build evidence manifest
+    - |
+      cat > evidence-manifest.json <<EOF_MANIFEST
+      {
+        "pipeline_id": "${CI_PIPELINE_ID}",
+        "project": "${CI_PROJECT_PATH}",
+        "commit": "${CI_COMMIT_SHA}",
+        "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+        "image_ref": "${PINNED_IMAGE}",
+        "image_digest": "${IMAGE_DIGEST}",
+        "artifacts": {
+          "sbom_cdx": "$(sha256sum sbom-cdx.json | cut -d' ' -f1)",
+          "sbom_spdx": "$(sha256sum sbom-spdx.json | cut -d' ' -f1)",
+          "vuln_report": "$(sha256sum vuln-report.json | cut -d' ' -f1)"
+        }
+      }
+      EOF_MANIFEST
+    - cosign sign-blob --yes --bundle manifest.bundle evidence-manifest.json >/dev/null
+
+    # 5. Upload deterministic artifact set only
+    - mkdir -p "${EVIDENCE_UPLOAD_DIR}"
+    - cp sbom-cdx.json sbom-spdx.json vuln-report.json evidence-manifest.json vuln-report.bundle manifest.bundle "${EVIDENCE_UPLOAD_DIR}/"
+    - mc cp --recursive "${EVIDENCE_UPLOAD_DIR}/" "minio/${EVIDENCE_BUCKET}/${EVIDENCE_PREFIX}/"
+
+    # 6. Index in OpenSearch evidence catalogue and fail on HTTP error
+    - |
+      HASH=$(sha256sum evidence-manifest.json | cut -d' ' -f1)
+      curl --fail --silent --show-error -X POST "${OPENSEARCH_URL}/evidence-artifacts/_doc" \
+        -H "Content-Type: application/json" \
+        -d "{
+          \"artifact_id\": \"$(uuidgen)\",
+          \"artifact_type\": \"evidence_manifest\",
+          \"source\": \"gitlab-ci\",
+          \"project\": \"${CI_PROJECT_PATH}\",
+          \"pipeline_id\": \"${CI_PIPELINE_ID}\",
+          \"created_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+          \"sha256_hash\": \"${HASH}\",
+          \"s3_bucket\": \"${EVIDENCE_BUCKET}\",
+          \"s3_key\": \"${EVIDENCE_PREFIX}/evidence-manifest.json\",
+          \"signing_method\": \"cosign-keyless\",
+          \"retention_tier\": \"ci_3y\",
+          \"framework_tags\": [\"NIS2\", \"CRA\"],
+          \"description\": \"CI evidence for ${CI_PROJECT_PATH} pipeline ${CI_PIPELINE_ID}\"
+        }"
+
+  artifacts:
+    paths:
+      - sbom-cdx.json
+      - sbom-spdx.json
+      - vuln-report.json
+      - evidence-manifest.json
+      - "*.bundle"
+    expire_in: never
