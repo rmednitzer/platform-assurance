@@ -5,6 +5,7 @@
 set -euo pipefail
 
 EVIDENCE_BUCKET="${EVIDENCE_BUCKET:-evidence}"
+CHAIN_PREFIX="${CHAIN_PREFIX:-chain}"
 ALERTMANAGER_URL="${ALERTMANAGER_URL:-http://alertmanager:9093}"
 WINDOW_DAYS="${WINDOW_DAYS:-7}"
 COSIGN_CERT_IDENTITY_REGEXP="${COSIGN_CERT_IDENTITY_REGEXP:-https://gitlab\\.com/.+}"
@@ -22,17 +23,17 @@ verify_chain_window() {
   anchor_date=$(date -u -d "${WINDOW_DAYS}+1 days ago" +%Y-%m-%d)
   local prev_hash="GENESIS"
 
-  if mc stat "minio/${EVIDENCE_BUCKET}/chain/${anchor_date}-chain-hash.txt" >/dev/null 2>&1; then
-    prev_hash=$(mc cat "minio/${EVIDENCE_BUCKET}/chain/${anchor_date}-chain-hash.txt")
+  if mc stat "minio/${EVIDENCE_BUCKET}/${CHAIN_PREFIX}/${anchor_date}-chain-hash.txt" >/dev/null 2>&1; then
+    prev_hash=$(mc cat "minio/${EVIDENCE_BUCKET}/${CHAIN_PREFIX}/${anchor_date}-chain-hash.txt")
   fi
 
   for i in $(seq "${WINDOW_DAYS}" -1 1); do
     local date
     date=$(date -u -d "${i} days ago" +%Y-%m-%d)
-    local manifest_file="minio/${EVIDENCE_BUCKET}/chain/${date}-manifest.txt"
-    local entry_file="minio/${EVIDENCE_BUCKET}/chain/${date}-chain-entry.txt"
-    local hash_file="minio/${EVIDENCE_BUCKET}/chain/${date}-chain-hash.txt"
-    local bundle_file="minio/${EVIDENCE_BUCKET}/chain/${date}-chain-entry.bundle"
+    local manifest_file="minio/${EVIDENCE_BUCKET}/${CHAIN_PREFIX}/${date}-manifest.txt"
+    local entry_file="minio/${EVIDENCE_BUCKET}/${CHAIN_PREFIX}/${date}-chain-entry.txt"
+    local hash_file="minio/${EVIDENCE_BUCKET}/${CHAIN_PREFIX}/${date}-chain-hash.txt"
+    local bundle_file="minio/${EVIDENCE_BUCKET}/${CHAIN_PREFIX}/${date}-chain-entry.bundle"
 
     for required in "${manifest_file}" "${entry_file}" "${hash_file}" "${bundle_file}"; do
       if ! mc stat "${required}" >/dev/null 2>&1; then

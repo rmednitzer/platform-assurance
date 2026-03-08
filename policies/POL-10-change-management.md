@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** Operations Lead
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual
+**Classification:** Internal
+
+## Purpose
+
+Define the change management process to ensure all changes are assessed, approved, and tracked to prevent unintended disruption.
+
+## Scope
+
+All changes to production systems, infrastructure, policies, and configurations.
+
+## Policy statements
+
+The organisation shall manage changes in accordance with the following categories and procedures.
 
 ## Change categories
 
@@ -33,6 +47,13 @@
 - SLO burn rate check (30-minute window)
 - Rollback if burn rate exceeds threshold
 
+## Roles and responsibilities
+
+- **Operations Lead:** Own change management process; approve normal changes.
+- **Team leads:** Review and approve standard changes within their domain.
+- **IC / on-call lead:** Approve emergency changes.
+- **All personnel:** Follow change management procedures; document changes.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -41,3 +62,10 @@
 | ISO 27001:2022 Clause 6.3, A.8.32 | ISO 27001 |
 | SCF CHG-01 | Secure Controls Framework |
 | CRA Annex I Part II (no security regression in updates) | CRA |
+| GDPR Art 25, Art 32 (security of processing; change controls for personal data systems) | GDPR |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |

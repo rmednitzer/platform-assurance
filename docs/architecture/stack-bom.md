@@ -24,6 +24,7 @@ The BOM is a rendered architecture view. The canonical control source is `contro
 | D | AI & API Management | `docs/ai-api/ai-api-management.md` | AI workload tiers + API gateway + LLM gateway + OWASP LLM |
 | E | Observability + IAM | `docs/observability/observability-iam.md` | Request-to-evidence flow + IAM architecture |
 | F | ISMS Policy Set | `docs/compliance/isms-policies.md` | 10 policies + supporting docs, cross-referenced to NIS2/CRA/GDPR/ISO 27001/SCF/Austrian law |
+| K | Security Assessment | `docs/security/security-assessment.md` | STRIDE threat model per trust boundary + gap analysis |
 
 ---
 

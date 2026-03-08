@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** CISO + Engineering Lead
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual
+**Classification:** Internal
+
+## Purpose
+
+Define the secure development lifecycle requirements to ensure security is integrated into every phase of software development.
+
+## Scope
+
+All software developed, modified, or maintained by the organisation, including infrastructure-as-code and CI/CD pipelines.
+
+## Policy statements
+
+The organisation shall follow a secure development lifecycle covering the following phases and practices.
 
 ## SDLC phases
 
@@ -28,6 +42,13 @@
 - Public CVD policy published (ISO 29147 aligned)
 - CRA: report actively exploited vulns to ENISA within 24h
 
+## Roles and responsibilities
+
+- **CISO + Engineering Lead:** Define secure development standards; approve security tooling.
+- **Developers:** Follow SDLC requirements; address vulnerability findings within SLA.
+- **Security team:** Conduct threat modelling; maintain SAST/DAST tooling.
+- **Release managers:** Verify security gates before deployment.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -36,3 +57,10 @@
 | ISO 27001:2022 A.8.25, A.8.8 | ISO 27001 |
 | SCF TDA-01 | Secure Controls Framework |
 | CRA Annex I Part I, Part II | CRA |
+| GDPR Art 25 (data protection by design and default) | GDPR |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |

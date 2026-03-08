@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** CISO + Procurement
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual
+**Classification:** Internal
+
+## Purpose
+
+Establish requirements for managing supply chain security risks, including supplier assessment, software supply chain integrity, and processor management.
+
+## Scope
+
+All third-party suppliers, software dependencies, and processors that support organisational operations or process organisational data.
+
+## Policy statements
+
+The organisation shall assess and manage supply chain risks covering the following areas.
 
 ## Supplier classification
 
@@ -31,6 +45,13 @@
 - Sub-processor notification clause
 - Audit rights exercised annually for critical processors
 
+## Roles and responsibilities
+
+- **CISO + Procurement:** Assess and classify suppliers; enforce contractual security requirements.
+- **DPO:** Ensure processor agreements comply with GDPR Art 28.
+- **Engineering teams:** Maintain SBOM accuracy; respond to dependency vulnerabilities.
+- **All personnel:** Report supply chain security concerns.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -40,3 +61,9 @@
 | SCF TPM-01 | Secure Controls Framework |
 | CRA Annex I Part II | CRA |
 | GDPR Art 28 | GDPR |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |

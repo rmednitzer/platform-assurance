@@ -2,7 +2,21 @@
 
 **Version:** 1.0 DRAFT
 **Owner:** CISO
+**Approved by:** [Board / Executive management — name and date]
 **Review cycle:** Annual
+**Classification:** Internal
+
+## Purpose
+
+Define the access control requirements to protect information assets through identity management, authentication, and authorisation.
+
+## Scope
+
+All users (human and machine), systems, and network resources within the organisation's infrastructure.
+
+## Policy statements
+
+The organisation shall enforce access controls based on the following principles and procedures.
 
 ## Principles
 
@@ -43,6 +57,13 @@
 - Service account usage monitoring (Vault audit → alerting).
 - RBAC drift detection (monthly automated check vs. Git baseline).
 
+## Roles and responsibilities
+
+- **CISO:** Define access control policy; approve privileged access procedures.
+- **Team managers:** Conduct quarterly access reviews; approve role assignments.
+- **IT operations:** Implement technical access controls; manage Keycloak and Vault.
+- **All personnel:** Use assigned credentials only; report suspicious access.
+
 ## Cross-references
 
 | Requirement | Source |
@@ -52,3 +73,9 @@
 | SCF IAC-01 | Secure Controls Framework |
 | GDPR Art 25, 32 | GDPR |
 | DSG § 50 | Austrian DSG |
+
+## Review and approval
+
+| Date | Version | Approved by | Signature |
+|------|---------|-------------|-----------|
+| YYYY-MM-DD | 1.0 | [Name, Title] | [Signature] |
