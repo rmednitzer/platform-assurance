@@ -16,7 +16,7 @@
 │                                                                   │
 │  Tier A: Local inference (lab/dev)                                │
 │    Ollama + Open WebUI + Qdrant                                   │
-│    Single node (axiom); no SLO; rapid iteration                   │
+│    Single node; no SLO; rapid iteration                           │
 │                                                                   │
 │  Tier B: Production inference (cluster/prod)                      │
 │    vLLM/TGI behind API gateway                                    │
@@ -35,7 +35,7 @@
 
 ### 1.2 — Tier A: Local inference (already in BOM)
 
-No BOM changes needed. Ollama + Open WebUI + Qdrant on `axiom`. T3 convenience dependency. No governance overhead beyond keeping model weights hash-pinned.
+No BOM changes needed. Ollama + Open WebUI + Qdrant on a single local node. T3 convenience dependency. No governance overhead beyond keeping model weights hash-pinned.
 
 ### 1.3 — Tier B: Production inference
 
