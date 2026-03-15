@@ -58,8 +58,8 @@ User/client
          │
          ▼
 ┌─────────────────────┐
-│ Inference server     │  ← TB3: Model boundary (PIAL enforcement)
-│ (vLLM / TGI)         │      Physical invariants: control law, actuator limits, GPU power/thermal
+│ Inference server     │  ← TB3: Model boundary enforcement
+│ (vLLM / TGI)         │      Input/output contracts, latency budgets, GPU power/thermal limits
 └────────┬────────────┘
          │
     ┌────┴────┐
@@ -71,7 +71,7 @@ User/client
 └────────┘ └─────────┘
 ```
 
-**PIAL — Physics-Informed Abstraction Layer:** The enforcement boundary at TB3 (the model serving boundary) that constrains model inputs and outputs to be consistent with physical reality. A PIAL specifies three classes of invariant: (1) the *input contract* — incoming state vectors must lie within physically realisable bounds (e.g., sensor readings within measurement range, state estimates satisfying kinematic consistency); (2) the *output contract* — model-generated control actions must satisfy physical invariants before being forwarded to actuators, including control law compliance, actuator saturation limits, rate-of-change constraints, stability margins, GPU power envelope limits, and thermal thresholds (TjMax, power cap); and (3) the *latency budget* — deterministic worst-case response-time bounds required to meet the control loop's real-time deadline, enforced via circuit-breaking if exceeded. Any inference backend that satisfies the PIAL's invariant checks can be substituted without renegotiating downstream actuator interfaces. [I] {80}
+**TB3 model boundary enforcement** constrains model inputs and outputs via three classes of invariant: (1) the *input contract* — incoming requests must satisfy validation rules (e.g., schema compliance, token-length limits, required metadata fields); (2) the *output contract* — model-generated responses must pass safety filters, format checks, and resource-limit enforcement (GPU power envelope, thermal thresholds) before being forwarded to downstream consumers; and (3) the *latency budget* — worst-case response-time bounds enforced via circuit-breaking if exceeded. Any inference backend that satisfies these invariant checks can be substituted without renegotiating downstream interfaces. [I] {80}
 
 ### 1.4 — Tier C: Training / fine-tuning
 
@@ -224,7 +224,7 @@ API Gateway (Kong/Envoy)
 |--------|---------|-----|-----------|
 | LiteLLM Proxy | MIT | Good — model routing, token tracking, rate limiting, OpenAI-compatible API | Less mature on safety filtering; custom filters needed |
 | Kong AI Gateway plugin | Apache 2.0 (Kong OSS) | Good — if Kong is already the API gateway; native AI plugin ecosystem | Kong Enterprise features may be needed for advanced AI policies |
-| Custom proxy (Python/Go) | Your own | Maximum control; exactly your PIAL contracts | Build + maintain cost |
+| Custom proxy (Python/Go) | Your own | Maximum control; exactly your model boundary contracts | Build + maintain cost |
 | MLflow AI Gateway | Apache 2.0 | Lightweight; model routing + rate limiting | Limited safety filtering |
 
 **Recommendation:** Kong as the north-south API gateway + LiteLLM as the LLM-specific gateway behind it. This separates concerns cleanly — Kong handles generic API management (auth, rate limiting, WAF), LiteLLM handles AI-specific routing and policy. Both are OSS. [I] {80}
